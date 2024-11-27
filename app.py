@@ -77,7 +77,6 @@ def main():
     st.set_page_config(page_title="Chat with multiple PDFs",
                        page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
-    st.write(openai_api_key)
 
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
@@ -103,6 +102,7 @@ def main():
                 text_chunks = get_text_chunks(raw_text)
 
                 # create vector store
+                st.write(openai_api_key)
                 vectorstore = get_vectorstore(text_chunks)
 
                 # create conversation chain
