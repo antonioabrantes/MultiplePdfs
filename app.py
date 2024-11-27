@@ -13,8 +13,6 @@ from langchain.llms import HuggingFaceHub
 import os
 from dotenv import load_dotenv
 
-
-
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
@@ -36,8 +34,6 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
-    openai_api_key = os.getenv("OPENAI_API_KEY")
-    st.write(openai_api_key)
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small", dimensions=1536, openai_api_key=openai_api_key)
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
@@ -45,7 +41,10 @@ def get_vectorstore(text_chunks):
 
 
 def get_conversation_chain(vectorstore):
-    llm = ChatOpenAI()
+    llm = ChatOpenAI(openai_api_key=openai_api_key,
+                     temperature=0.0,
+                     max_tokens=4000,
+                     model="gpt-4o-mini")
     # llm = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":512})
 
     memory = ConversationBufferMemory(
@@ -73,6 +72,8 @@ def handle_userinput(user_question):
 
 def main():
     load_dotenv()
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+
     st.set_page_config(page_title="Chat with multiple PDFs",
                        page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
@@ -83,6 +84,7 @@ def main():
         st.session_state.chat_history = None
 
     st.header("Chat with multiple PDFs :books:")
+    st.write(openai_api_key)
     user_question = st.text_input("Ask a question about your documents:")
     if user_question:
         handle_userinput(user_question)
