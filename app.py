@@ -84,7 +84,7 @@ def main():
         st.session_state.chat_history = None
 
     st.header("Chat with multiple PDFs :books:")
-    st.write(openai_api_key)
+
     user_question = st.text_input("Ask a question about your documents:")
     if user_question:
         handle_userinput(user_question)
