@@ -35,7 +35,8 @@ def get_text_chunks(text):
     return chunks
 
 
-def get_vectorstore(text_chunks):
+def get_vectorstore(text_chunks,openai_api_key):
+    st.write(openai_api_key)
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small", dimensions=1536, openai_api_key=openai_api_key)
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
@@ -102,8 +103,7 @@ def main():
                 text_chunks = get_text_chunks(raw_text)
 
                 # create vector store
-                st.write(openai_api_key)
-                vectorstore = get_vectorstore(text_chunks)
+                vectorstore = get_vectorstore(text_chunks,openai_api_key)
 
                 # create conversation chain
                 st.session_state.conversation = get_conversation_chain(
