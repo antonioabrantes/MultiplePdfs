@@ -14,7 +14,8 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path='.env')
-open_api_token = os.getenv("OPENAI_API_TOKEN")
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
 
 def get_pdf_text(pdf_docs):
     text = ""
