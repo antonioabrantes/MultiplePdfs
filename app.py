@@ -36,7 +36,6 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
-    load_dotenv(dotenv_path='.env')
     openai_api_key = os.getenv("OPENAI_API_KEY")
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small", dimensions=1536, openai_api_key=openai_api_key)
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
