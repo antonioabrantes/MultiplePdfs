@@ -9,8 +9,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
 from langchain.llms import HuggingFaceHub 
-from langchain_huggingface import HuggingFaceEmbeddings
-
 
 import os
 from dotenv import load_dotenv
@@ -39,8 +37,7 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
-    #embeddings = OpenAIEmbeddings()
-    embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
+    embeddings = OpenAIEmbeddings(open_api_token=open_api_token)
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
