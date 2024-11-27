@@ -12,6 +12,8 @@ from langchain.llms import HuggingFaceHub
 
 import os
 from dotenv import load_dotenv
+load_dotenv()
+openai_api_key = os.getenv("OPENAI_API_KEY")
 
 def get_pdf_text(pdf_docs):
     text = ""
@@ -33,7 +35,7 @@ def get_text_chunks(text):
     return chunks
 
 
-def get_vectorstore(text_chunks,openai_api_key):
+def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small", dimensions=1536, openai_api_key=openai_api_key)
     # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
@@ -71,8 +73,6 @@ def handle_userinput(user_question):
 
 
 def main():
-    load_dotenv()
-    openai_api_key = os.getenv("OPENAI_API_KEY")
 
     st.set_page_config(page_title="Chat with multiple PDFs",
                        page_icon=":books:")
@@ -102,7 +102,7 @@ def main():
                 text_chunks = get_text_chunks(raw_text)
 
                 # create vector store
-                vectorstore = get_vectorstore(text_chunks,openai_api_key)
+                vectorstore = get_vectorstore(text_chunks)
 
                 # create conversation chain
                 st.session_state.conversation = get_conversation_chain(
